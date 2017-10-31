@@ -1,0 +1,25 @@
+{
+  "submission_type": "single",
+  "label": "Update Dataset with CMR metadata",
+  "allowed_accounts": [ "ops" ],
+  "params" : [
+    {
+      "name": "id",
+      "from": "submitter",
+      "type": "text",
+      "placeholder": "dataset ID"
+    },
+    {
+      "name": "ingest_time",
+      "from": "submitter",
+      "type": "datetime",
+      "placeholder": "ingest time into CMR"
+    },
+    {
+      "name": "delivery_time",
+      "from": "submitter",
+      "type": "datetime",
+      "placeholder": "delivery time to ASF"
+    }
+  ]
+}
