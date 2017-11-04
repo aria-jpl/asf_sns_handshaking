@@ -1,18 +1,11 @@
 {
+  "required_queues":["grfn-job_worker-small"],
   "command":"/home/ops/verdi/ops/asf_sns_handshaking/update_es.py",
   "disk_usage":"1GB",
   "params" : [
     {
-      "name": "id",
-      "destination": "positional"
-    },
-    {
-      "name": "ingest_time",
-      "destination": "positional"
-    },
-    {
-      "name": "delivery_time",
-      "destination": "positional"
+      "name": "sns_message",
+      "destination": "context"
     }
   ]
 }

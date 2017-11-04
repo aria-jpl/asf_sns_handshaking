@@ -1,25 +1,14 @@
 {
   "submission_type": "single",
+  "component":"mozart",
   "label": "Update Dataset with CMR metadata",
   "allowed_accounts": [ "ops" ],
   "params" : [
     {
-      "name": "id",
+      "name": "sns_message",
       "from": "submitter",
       "type": "text",
-      "placeholder": "dataset ID"
-    },
-    {
-      "name": "ingest_time",
-      "from": "submitter",
-      "type": "datetime",
-      "placeholder": "ingest time into CMR"
-    },
-    {
-      "name": "delivery_time",
-      "from": "submitter",
-      "type": "datetime",
-      "placeholder": "delivery time to ASF"
+      "placeholder": "message from ASF"
     }
   ]
 }

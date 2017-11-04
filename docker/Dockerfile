@@ -1,7 +1,7 @@
 FROM hysds/pge-base
 
-MAINTAINER jlinick "Justin.P.Linick@jpl.nasa.gov"
-LABEL description="PDL base image"
+MAINTAINER malarout "namrata.malarout@jpl.nasa.gov"
+LABEL description="SNS ASF Handshaking"
 
 ARG git_oauth_token
 ARG id
