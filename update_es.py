@@ -34,7 +34,8 @@ def get_url_index_type_id(_id):
             }
         }
     }
-    url = "%s/%s/_search/" % (es_url, es_index)
+    #url = "%s/%s/_search/" % (es_url, es_index)
+    url =  "%s/grq_v1.1.2_s1-ifg_test/S1-IFG/_search"% es_url # for testing purposes
     data = json.dumps(query, indent=2)
     print "Posting ES search: {0} with {1}".format(url, data)
     req_result = requests.post(url, data=data)
