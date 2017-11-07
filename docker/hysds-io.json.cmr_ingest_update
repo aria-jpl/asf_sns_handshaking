@@ -1,5 +1,5 @@
 {
-  "submission_type": "single",
+  "submission_type": "individual",
   "component":"mozart",
   "label": "Update Dataset with CMR metadata",
   "allowed_accounts": [ "ops" ],
