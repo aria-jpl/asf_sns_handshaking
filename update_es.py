@@ -34,8 +34,8 @@ def get_url_index_type_id(_id):
             }
         }
     }
-    #url = "%s/%s/_search/" % (es_url, es_index)
-    url =  "%s/grq_v1.1.2_s1-ifg_test/S1-IFG/_search"% es_url # for testing purposes
+    url = "%s/%s/_search/" % (es_url, es_index)
+    #url =  "%s/grq_v1.1.2_s1-ifg_test/S1-IFG/_search"% es_url # for testing purposes
     data = json.dumps(query, indent=2)
     print "Posting ES search: {0} with {1}".format(url, data)
     req_result = requests.post(url, data=data)
@@ -67,9 +67,9 @@ def update_document(_id, asf_delivery_time, asf_ingest_time):
         "doc_as_upsert": True
         }
 
-    #url = "{0}/{1}/{2}/{3}/_update".format(*get_url_index_type_id(product_id))
+    url = "{0}/{1}/{2}/{3}/_update".format(*get_url_index_type_id(product_id))
     #just for testing purposes. Created grq_v1.1.2_s1-ifg_test index. It is a copy of the ifg index.
-    url = "{0}/{1}/grq_v1.1.2_s1-ifg_test/{3}/_update".format(*get_url_index_type_id(_id))
+    #url = "{0}/{1}/grq_v1.1.2_s1-ifg_test/{3}/_update".format(*get_url_index_type_id(_id))
     print "Updating: {0} with {1}".format(url, json.dumps(new_doc))
     req_result = requests.post(url, data=json.dumps(new_doc))
     if req_result.raise_for_status() is  None:
