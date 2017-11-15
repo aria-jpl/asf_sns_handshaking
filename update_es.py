@@ -51,7 +51,7 @@ def get_url_index_type_id(_id):
     _id = result["hits"]["hits"][0]["_id"]
     return (es_url, _index, _type, _id)
 
-def update_document(_id, asf_delivery_time, asf_ingest_time):
+def update_document(_id, asf_delivery_time, asf_ingest_time, asf_delivery_status):
     '''
     Update the ES document with new information
     Note: borrowed from user_tags
@@ -62,7 +62,8 @@ def update_document(_id, asf_delivery_time, asf_ingest_time):
     new_doc = {
         "doc": {
             "ASF_delivery_time": asf_delivery_time,
-            "ASF_ingestion_time": asf_ingest_time
+            "ASF_ingestion_time": asf_ingest_time,
+            "metadata.tags": asf_delivery_status
         },
         "doc_as_upsert": True
         }
@@ -90,8 +91,9 @@ if __name__ == "__main__":
     #get product id
     STATUS = SNS['Status']
     PRODUCT_ID = SNS['ProductName']
-    if STATUS == "success":
-        DELIVERY_TIME = SNS['DeliveryTime']
-        INGEST_TIME = SNS['IngestTime']
-        if update_document(PRODUCT_ID, DELIVERY_TIME, INGEST_TIME):
-            print "Successfully updated ES document"
+    DELIVERY_TIME = SNS['DeliveryTime']
+    INGEST_TIME = SNS['IngestTime']
+    if STATUS == "failure":
+        STATUS = SNS['ErrorCode']
+    if update_document(PRODUCT_ID, DELIVERY_TIME, INGEST_TIME, STATUS):
+        print "Successfully updated ES document"
