@@ -68,7 +68,7 @@ def update_document(_id, asf_delivery_time, asf_ingest_time, asf_delivery_status
         "doc_as_upsert": True
         }
 
-    url = "{0}/{1}/{2}/{3}/_update".format(*get_url_index_type_id(product_id))
+    url = "{0}/{1}/{2}/{3}/_update".format(*get_url_index_type_id(_id))
     #just for testing purposes. Created grq_v1.1.2_s1-ifg_test index. It is a copy of the ifg index.
     #url = "{0}/{1}/grq_v1.1.2_s1-ifg_test/{3}/_update".format(*get_url_index_type_id(_id))
     print "Updating: {0} with {1}".format(url, json.dumps(new_doc))
