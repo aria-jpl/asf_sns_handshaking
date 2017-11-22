@@ -59,12 +59,13 @@ def lambda_handler(event, context):
     print ("Got event: %s" % json.dumps(event, indent=2))
     print ("Got context: %s"% context)
 
-    product = event['ProductName']
+    sns_message = json.loads(event["Records"][0]["Sns"]["Message"])
+    product = sns_message["ProductName"]
     print ("From SNS product key: %s" % product)
     #submit mozart jobs to update ES
     job_type = "job-cmr_ingest_update"
     job_release = "master"
-    job_params = {"sns_message": event} #pass the whole SNS message
+    job_params = {"sns_message": sns_message} #pass the whole SNS message
     tag = "asf_delivered"
 
     submit_job(job_type, job_release, product, tag, json.dumps(job_params))
