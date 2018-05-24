@@ -10,12 +10,16 @@ we want to capture this acknowledgement by stamping the product
 with delivery and ingestion time.
 '''
 
+import os
 import json
 import  requests
 
 print ('Loading function')
 
-MOZART_URL = 'https://100.64.134.67'
+MOZART_URL = os.environ['MOZART_URL']
+QUEUE = os.environ['QUEUE']
+JOB_TYPE = os.environ['JOB_TYPE']
+JOB_RELEASE = os.environ['JOB_RELEASE']
 
 def submit_job(job_type, release, product_id, tag, job_params):
     '''
@@ -24,7 +28,7 @@ def submit_job(job_type, release, product_id, tag, job_params):
     # submit mozart job
     job_submit_url = '%s/mozart/api/v0.1/job/submit' % MOZART_URL
     params = {
-        'queue': 'grfn-job_worker-small',
+        'queue': QUEUE,
         'priority': '5',
         'job_name': 'job_%s-%s' % ('es_update', product_id),
         'tags': '["%s"]' % tag,
@@ -63,8 +67,8 @@ def lambda_handler(event, context):
     product = sns_message["ProductName"]
     print ("From SNS product key: %s" % product)
     #submit mozart jobs to update ES
-    job_type = "job-cmr_ingest_update"
-    job_release = "master"
+    job_type = JOB_TYPE
+    job_release = JOB_RELEASE
     job_params = {"sns_message": sns_message} #pass the whole SNS message
     tag = "asf_delivered"
 
