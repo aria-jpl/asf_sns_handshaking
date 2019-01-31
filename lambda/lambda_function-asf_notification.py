@@ -12,7 +12,7 @@ with delivery and ingestion time.
 
 import os
 import json
-import  requests
+import requests
 
 print ('Loading function')
 
@@ -20,11 +20,20 @@ MOZART_URL = os.environ['MOZART_URL']
 QUEUE = os.environ['QUEUE']
 JOB_TYPE = os.environ['JOB_TYPE']
 JOB_RELEASE = os.environ['JOB_RELEASE']
+TAGGING = os.environ['PRODUCT_TAG']  # set to True if product in HySDS catalog should be tagged as delivered.
+
 
 def submit_job(job_type, release, product_id, tag, job_params):
-    '''
+    """
     submits a job to mozart
-    '''
+    :param job_type:
+    :param release:
+    :param product_id:
+    :param tag:
+    :param job_params:
+    :return:
+    """
+
     # submit mozart job
     job_submit_url = '%s/mozart/api/v0.1/job/submit' % MOZART_URL
     params = {
@@ -53,23 +62,31 @@ def submit_job(job_type, release, product_id, tag, job_params):
     else:
         raise Exception('job not submitted successfully: %s' % result)
 
+
 def lambda_handler(event, context):
-    '''
+    """
     This lambda handler calls submit_job with the job type info
     and product id from the sns message
-    '''
-
+    :param event:
+    :param context:
+    :return:
+    """
     print ("Got event of type: %s" % type(event))
     print ("Got event: %s" % json.dumps(event, indent=2))
-    print ("Got context: %s"% context)
+    print ("Got context: %s" % context)
 
     sns_message = json.loads(event["Records"][0]["Sns"]["Message"])
     product = sns_message["ProductName"]
     print ("From SNS product key: %s" % product)
-    #submit mozart jobs to update ES
+
+    # submit mozart jobs to update ES
     job_type = JOB_TYPE
     job_release = JOB_RELEASE
-    job_params = {"sns_message": sns_message} #pass the whole SNS message
-    tag = "asf_delivered"
+    job_params = {"sns_message": sns_message}  # pass the whole SNS message
+    if TAGGING is True:
+        job_params["product_tagging"] = True
+    else:
+        job_params["product_tagging"] = False
 
-    submit_job(job_type, job_release, product, tag, json.dumps(job_params))
+    job_tag = "asf_delivered"
+    submit_job(job_type, job_release, product, job_tag, json.dumps(job_params))

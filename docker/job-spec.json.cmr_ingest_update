@@ -6,6 +6,10 @@
     {
       "name": "sns_message",
       "destination": "context"
+    },
+    {
+      "name": "product_tagging",
+      "destination": "context"
     }
   ]
 }

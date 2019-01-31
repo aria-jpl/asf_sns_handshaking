@@ -9,6 +9,12 @@
       "from": "submitter",
       "type": "text",
       "placeholder": "message from ASF"
+    },
+    {
+      "name": "product_tagging",
+      "from": "submitter",
+      "type": "boolean",
+      "placeholder": "specifies if product should be tagged as delivered"
     }
   ]
 }
