@@ -151,5 +151,5 @@ if __name__ == "__main__":
         status = sns['ErrorCode']
     if update_document(product_id, delivery_time, ingest_time, status, product_tagging):
         print "Successfully updated ES document"
-    if status == "success":
-        deliver_to_aria_products(product_id)
+    # temporarily removing check of successful product delivery to ASF
+    deliver_to_aria_products(product_id)
