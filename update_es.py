@@ -33,7 +33,7 @@ def add_doc_to_publish(prod_id, catalog_index, doc_type, es_doc):
     :param es_doc:
     :return: True if indexing was successful, else return False
     """
-    result = ES.index(index="{}-released".format(publish_index), doc_type=DOC_TYPE, body=es_doc, id=prod_id)
+    result = ES.index(index="{}-released".format(catalog_index), doc_type=doc_type, body=es_doc, id=prod_id)
     if str(result["created"]) == "True":
         return True
     else:
