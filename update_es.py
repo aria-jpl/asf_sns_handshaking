@@ -150,4 +150,8 @@ if __name__ == "__main__":
         print "Successfully updated ES document"
     # temporarily removing check of successful product delivery to ASF
     es_url, _index, _type, _id = get_url_index_type_id(product_id)
+
+    if not ES.indices.exists(index="{}-released".format(_index)):
+        ES.indices.create(index="{}-released".format(_index))
+
     deliver_to_aria_products(product_id, index=_index, doc_type=_type)
