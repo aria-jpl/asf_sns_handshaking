@@ -1,6 +1,5 @@
 {
   "submission_type": "individual",
-  "component": "tosca",
   "label": "Update Dataset with CMR metadata",
   "allowed_accounts": [ "ops" ],
   "params" : [

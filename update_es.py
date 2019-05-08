@@ -17,33 +17,30 @@ LOGGER = logging.getLogger("hysds")
 BASE_PATH = os.path.dirname(__file__)
 ES_URL = app.conf.get("GRQ_ES_URL", "http://localhost:9200")
 ES = elasticsearch.Elasticsearch(ES_URL)
-CATALOG_INDEX = "grq_v*_s1-gunw"
-PUBLISH_INDEX = "{}-released".format(CATALOG_INDEX)
-DOC_TYPE = "S1-GUNW"
 
 
-def get_document(prod_id):
-    result = ES.get(index=CATALOG_INDEX, doc_type=DOC_TYPE, id=prod_id)
+def get_document(prod_id, index, doc_type):
+    result = ES.get(index=index, doc_type=doc_type, id=prod_id)
     if result is not None:
         return result.get('_source')
     raise ValueError("Record not found for id {}".format(prod_id))
 
 
-def add_doc_to_publish(prod_id, es_doc):
+def add_doc_to_publish(prod_id, catalog_index, doc_type, es_doc):
     """
     Add a half orbit to ES
     :param hf_orbit_id:
     :param es_doc:
     :return: True if indexing was successful, else return False
     """
-    result = ES.index(index=PUBLISH_INDEX, doc_type=DOC_TYPE, body=es_doc, id=prod_id)
+    result = ES.index(index="{}-released".format(publish_index), doc_type=DOC_TYPE, body=es_doc, id=prod_id)
     if str(result["created"]) == "True":
         return True
     else:
         return False
 
 
-def deliver_to_aria_products(prod_id):
+def deliver_to_aria_products(prod_id, index, doc_type):
     """
     Copy over document from Catalog index to Publish Index.
     :param prod_id:
@@ -51,8 +48,8 @@ def deliver_to_aria_products(prod_id):
     :param type:
     :return:
     """
-    doc = get_document(prod_id)
-    if add_doc_to_publish(prod_id, doc) is True:
+    doc = get_document(prod_id, index=index, doc_type=doc_type)
+    if add_doc_to_publish(prod_id, catalog_index=index, doc_type=doc_type , es_doc=doc) is True:
         logging.info("{} delivered to aria-products.".format(prod_id))
     else:
         logging.info("{} FAILED to deliver to aria-products.")
@@ -152,4 +149,5 @@ if __name__ == "__main__":
     if update_document(product_id, delivery_time, ingest_time, status, product_tagging):
         print "Successfully updated ES document"
     # temporarily removing check of successful product delivery to ASF
-    deliver_to_aria_products(product_id)
+    es_url, _index, _type, _id = get_url_index_type_id(product_id)
+    deliver_to_aria_products(product_id, index=_index, doc_type=_type)
