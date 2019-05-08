@@ -153,5 +153,6 @@ if __name__ == "__main__":
 
     if not ES.indices.exists(index="{}-released".format(_index)):
         ES.indices.create(index="{}-released".format(_index))
+        ES.indices.put_alias("{}-released".format(_index), name="grq_standard_product")
 
     deliver_to_aria_products(product_id, index=_index, doc_type=_type)
