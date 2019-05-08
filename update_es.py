@@ -17,7 +17,7 @@ LOGGER = logging.getLogger("hysds")
 BASE_PATH = os.path.dirname(__file__)
 ES_URL = app.conf.get("GRQ_ES_URL", "http://localhost:9200")
 ES = elasticsearch.Elasticsearch(ES_URL)
-CATALOG_INDEX = "grq_v2.0.1_s1-gunw"
+CATALOG_INDEX = "grq_v*_s1-gunw"
 PUBLISH_INDEX = "{}-released".format(CATALOG_INDEX)
 DOC_TYPE = "S1-GUNW"
 
