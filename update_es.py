@@ -154,6 +154,15 @@ if __name__ == "__main__":
     if not ES.indices.exists(index="{}-released".format(_index)):
         ES.indices.create(index="{}-released".format(_index))
         ES.indices.put_alias("{}-released".format(_index), name="grq_standard_product")
+        """
+        For ARIA-22,
+        The alias grq_standard_product is used by aria-products.jpl.nasa.gov. 
+        But it looks like for any new index, the alias grq is automatically added too. 
+        This causes Tosca to not load because it detects duplicate datasets with the same _id.
+        Because of this, we need to remove the alias grq from the released index after it’s creation.
+        """
+        if ES.indices.exists_alias(index="{}-released".format(_index), name="grq"):
+            ES.indices.delete_alias(index="{}-released".format(_index), name="grq")
 
     if status == "success":
         deliver_to_aria_products(product_id, index=_index, doc_type=_type)
